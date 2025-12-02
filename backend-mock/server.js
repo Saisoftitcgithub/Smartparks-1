@@ -12,14 +12,28 @@ const allowedOrigins = [
   'http://localhost:4200',
   process.env.FRONTEND_URL,
   'https://smartparks-frontend.onrender.com',
-  'https://smartparks-frontend.render.com'
+  'https://smartparks-frontend.render.com',
+  /^https:\/\/.*\.onrender\.com$/,
+  /^https:\/\/.*\.render\.com$/
 ].filter(Boolean);
 
 app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
+    
+    // Check if origin matches any allowed origin
+    const isAllowed = allowedOrigins.some(allowed => {
+      if (typeof allowed === 'string') {
+        return allowed === origin;
+      } else if (allowed instanceof RegExp) {
+        return allowed.test(origin);
+      }
+      return false;
+    });
+    
+    // In development, allow all origins
+    if (process.env.NODE_ENV !== 'production' || isAllowed) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));

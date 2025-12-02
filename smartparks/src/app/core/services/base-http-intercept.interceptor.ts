@@ -31,16 +31,16 @@ export class BaseHttpInterceptor implements HttpInterceptor {
 
     return next.handle(modifiedRequest).pipe(
       catchError((error: HttpErrorResponse) => {
-        let errorMessage = 'An error occurred';
-        if (error.error instanceof ErrorEvent) {
-          // Client-side error
-          errorMessage = `Error: ${error.error.message}`;
-        } else {
-          // Server-side error
-          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-        }
-        console.error(errorMessage);
-        return throwError(errorMessage);
+        // Log full error details for debugging
+        console.error('HTTP Error:', {
+          status: error.status,
+          statusText: error.statusText,
+          url: error.url,
+          message: error.message,
+          error: error.error
+        });
+        // Preserve the original error object so components can access error.status
+        return throwError(() => error);
       })
     );
   }

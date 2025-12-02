@@ -20,7 +20,12 @@ const allowedOrigins = [
 app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
+    if (!origin) {
+      console.log('[CORS] Request with no origin - allowing');
+      return callback(null, true);
+    }
+    
+    console.log(`[CORS] Request from origin: ${origin}`);
     
     // Check if origin matches any allowed origin
     const isAllowed = allowedOrigins.some(allowed => {
@@ -34,12 +39,16 @@ app.use(cors({
     
     // In development, allow all origins
     if (process.env.NODE_ENV !== 'production' || isAllowed) {
+      console.log(`[CORS] Allowing origin: ${origin}`);
       callback(null, true);
     } else {
+      console.log(`[CORS] Blocking origin: ${origin}`);
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-TenantID']
 }));
 app.use(bodyParser.json());
 
@@ -128,17 +137,37 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Backend is running' });
 });
 
+// Test login endpoint (for debugging)
+app.post('/api/test-login', (req, res) => {
+  console.log('[TEST-LOGIN] Request received:', req.body);
+  res.json({ 
+    message: 'Test endpoint working',
+    received: req.body,
+    headers: req.headers
+  });
+});
+
 // Login endpoint
 app.post('/api/login', checkTenant, (req, res) => {
   const { username, password } = req.body;
   
-  console.log(`Login attempt: ${username}`);
+  console.log(`[LOGIN] Attempt from: ${req.headers.origin || 'unknown'}`);
+  console.log(`[LOGIN] Username: ${username}, Password provided: ${password ? 'yes' : 'no'}`);
+  console.log(`[LOGIN] Request body:`, JSON.stringify(req.body));
+  
+  if (!username || !password) {
+    console.log(`[LOGIN] Missing credentials`);
+    return res.status(400).json({ error: 'Username and password are required' });
+  }
   
   const user = mockUsers.find(u => u.username === username && u.password === password);
   
   if (!user) {
+    console.log(`[LOGIN] Invalid credentials for: ${username}`);
     return res.status(401).json({ error: 'Invalid username or password' });
   }
+  
+  console.log(`[LOGIN] Success for user: ${username}`);
 
   // Generate JWT token
   const token = jwt.sign(

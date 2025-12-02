@@ -9,11 +9,11 @@ export const environment = {
     apiUrl: (() => {
       // Check if running on Render
       if (window.location.hostname.includes('render.com') || window.location.hostname.includes('onrender.com')) {
-        return 'https://smartparks-backend.onrender.com/api';
+        return 'https://smartparks-backend.onrender.com/api/';
       }
       // Local development
       if (window.location.protocol === 'https:') {
-        return window.location.protocol + '//' + window.location.hostname + '/api';
+        return window.location.protocol + '//' + window.location.hostname + '/api/';
       } else {
         return window.location.protocol + '//' + window.location.hostname + ':5680/api/';
       }

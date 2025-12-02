@@ -1,0 +1,35 @@
+services:
+  # Backend API Service
+  - type: web
+    name: smartparks-backend
+    env: node
+    plan: free
+    buildCommand: cd backend-mock && npm install
+    startCommand: cd backend-mock && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: SECRET_KEY
+        generateValue: true
+    healthCheckPath: /api/health
+
+  # Frontend Web Service
+  - type: web
+    name: smartparks-frontend
+    env: node
+    plan: free
+    buildCommand: cd smartparks && npm install && npm run build
+    startCommand: cd smartparks && node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: API_URL
+        fromService:
+          name: smartparks-backend
+          type: env
+          key: RENDER_EXTERNAL_URL
+

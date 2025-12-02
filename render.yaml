@@ -27,9 +27,4 @@ services:
         value: production
       - key: PORT
         value: 10000
-      - key: API_URL
-        fromService:
-          name: smartparks-backend
-          type: env
-          key: RENDER_EXTERNAL_URL
 

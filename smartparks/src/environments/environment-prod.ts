@@ -5,11 +5,21 @@
 export const environment = {
     production: true,
     url : window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + '/',
-    // For Render deployment - use backend service URL
-    // Update this with your actual Render backend URL after deployment
-    apiUrl: (window.location.hostname.includes('render.com') || window.location.hostname.includes('onrender.com'))
-      ? 'https://smartparks-backend.onrender.com/api'
-      : window.location.protocol + '//' + window.location.hostname + '/api'
+    // For Render deployment - dynamically construct backend URL
+    // If on Render, try to construct backend URL from frontend URL
+    apiUrl: (() => {
+      if (window.location.hostname.includes('render.com') || window.location.hostname.includes('onrender.com')) {
+        // Try to construct backend URL from frontend URL
+        // Replace 'frontend' with 'backend' in the service name
+        const hostname = window.location.hostname;
+        if (hostname.includes('smartparks-frontend')) {
+          return hostname.replace('smartparks-frontend', 'smartparks-backend') + '/api';
+        }
+        // Fallback: use the standard backend URL pattern
+        return 'https://smartparks-backend.onrender.com/api';
+      }
+      return window.location.protocol + '//' + window.location.hostname + '/api';
+    })()
   };
   
   // Fallback for local development

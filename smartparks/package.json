@@ -4,8 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "NODE_OPTIONS=--max_old_space_size=16384 ./node_modules/@angular/cli/bin/ng.js build --configuration production",
-    "build:prod": "NODE_OPTIONS=--max_old_space_size=16384 ./node_modules/@angular/cli/bin/ng.js build --configuration production",
+    "build": "npx ng build --configuration production",
+    "build:prod": "npx ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve": "node server.js"

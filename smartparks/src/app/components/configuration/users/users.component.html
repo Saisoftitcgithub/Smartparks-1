@@ -1,0 +1,148 @@
+<div class="col-12 filters">
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <div class="field grid">
+                <div class="col-12 md:col-6">
+                    <p-dropdown placeholder="Select User" [options]="userList" optionLabel="username"
+                        [(ngModel)]="selectedUser" (onChange)="onUserSelect($event)"></p-dropdown>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="right">
+            <div class="my-2">
+                <button pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2"
+                    (click)="addUser()"></button>
+            </div>
+        </ng-template>
+    </p-toolbar>
+</div>
+<div class="col-12 form-fields" *ngIf="!!selectedUser || userDetails">
+    <div class="card">
+        <h5 *ngIf="!!selectedUser">User - <b>{{selectedUser.username}}</b></h5>
+        <div class="p-fluid p-formgrid grid" [formGroup]="userFormGroup">
+            <div class="field col-12 md:col-4">
+                <label htmlFor="userName">User Name *</label>
+                <input pInputText id="userName" type="text" formControlName="username" />
+                <small
+                    *ngIf="userFormGroup.get('username')?.hasError('required') && userFormGroup.get('username')?.touched"
+                    id="username-help" class="p-error">User Name is required.</small>
+                <small
+                    *ngIf="userFormGroup.get('username')?.hasError('pattern') && userFormGroup.get('username')?.touched"
+                    id="username-help" class="p-error">User Name is not valid.</small>
+            </div>
+            <div class="field col-12 md:col-4" *ngIf="!userDetails.id">
+                <label htmlFor="password">Password <span>*</span></label>
+                <p-password id="password" formControlName="password" placeholder="Password" [toggleMask]="true"
+                    inputStyleClass="w-full p-2.5" (onBlur)="onPasswordBlur($event)"
+                    strongRegex="^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$">
+                    <ng-template pTemplate="header">
+                        <h6>Pick a password</h6>
+                    </ng-template>
+                    <ng-template pTemplate="footer">
+                        <p-divider></p-divider>
+                        <p class="mt-2">Suggestions</p>
+                        <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
+                            <li>At least one uppercase</li>
+                            <li>At least one lowercase</li>
+                            <li>At least one numeric</li>
+                            <li>At least one special Character</li>
+                            <li>Minimum 8 characters</li>
+                        </ul>
+                    </ng-template>
+                </p-password>
+                <small
+                    *ngIf="userFormGroup.get('password')?.hasError('required') && userFormGroup.get('password')?.touched"
+                    id="username-help" class="p-error">Password is required.</small>
+                <small
+                    *ngIf="userFormGroup.get('password')?.hasError('pattern') && userFormGroup.get('password')?.touched"
+                    id="username-help" class="p-error">Password is not valid.</small>
+            </div>
+            <div class="field col-12 md:col-4">
+                <label htmlFor="fName">First Name *</label>
+                <input pInputText id="fName" type="text" formControlName="firstname" />
+                <small
+                    *ngIf="userFormGroup.get('firstname')?.hasError('required') && userFormGroup.get('firstname')?.touched"
+                    id="username-help" class="p-error">First Name is required.</small>
+                <small
+                    *ngIf="userFormGroup.get('firstname')?.hasError('pattern') && userFormGroup.get('firstname')?.touched"
+                    id="username-help" class="p-error">First Name is not valid.</small>
+            </div>
+            <div class="field col-12 md:col-4">
+                <label htmlFor="mName">Middle Name</label>
+                <input pInputText id="mName" type="text" formControlName="middlename" />
+            </div>
+            <div class="field col-12 md:col-4">
+                <label htmlFor="lName">Last Name *</label>
+                <input pInputText id="lName" type="text" formControlName="lastname" />
+                <small
+                    *ngIf="userFormGroup.get('lastname')?.hasError('required') && userFormGroup.get('lastname')?.touched"
+                    id="username-help" class="p-error">Last Name is required.</small>
+                <small
+                    *ngIf="userFormGroup.get('lastname')?.hasError('pattern') && userFormGroup.get('lastname')?.touched"
+                    id="username-help" class="p-error">Last Name is not valid.</small>
+            </div>
+            <div class="field col-12 md:col-4">
+                <label htmlFor="branches">Branch</label>
+                <p-multiSelect [options]="branchList" optionLabel="name" formControlName="branches"></p-multiSelect>
+            </div>
+            <div class="field col-12 md:col-4">
+                <label htmlFor="authorities">Authorities</label>
+                <p-multiSelect [options]="authoritiesList" optionLabel="name" formControlName="authorities"></p-multiSelect>
+            </div>
+        </div>
+        <div class="flex flex-wrap gap-2 justify-content-end" *ngIf="!selectedUser">
+            <button pButton pRipple label="Save" (click)="saveUser()"></button>
+        </div>
+        <div class="flex flex-wrap gap-2 justify-content-end" *ngIf="!!selectedUser">
+            <button pButton pRipple label="Update" (click)="updateUser()"></button>
+        </div>
+        <div class="p-fluid p-formgrid grid" *ngIf="!!userDetails.id">
+            <div class="col-12 md:col-3">
+                <div class="field-checkbox">
+                    <p-checkbox name="reset" [(ngModel)]="resetPassword" id="reset" [binary]="true"
+                        inputId="binary"></p-checkbox>
+                    <label for="reset">Reset Password</label>
+                </div>
+            </div>
+        </div>
+        <div class="p-fluid p-formgrid grid" *ngIf="resetPassword">
+            <div class="field col-12 md:col-4">
+                <label htmlFor="password">Password <span>*</span></label>
+                <p-password id="password" [(ngModel)]="userDetails.password" placeholder="Password" [toggleMask]="true"
+                    inputStyleClass="w-full p-2.5" (onBlur)="onPasswordBlur($event)"
+                    strongRegex="^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$">
+                    <ng-template pTemplate="header">
+                        <h6>Pick a password</h6>
+                    </ng-template>
+                    <ng-template pTemplate="footer">
+                        <p-divider></p-divider>
+                        <p class="mt-2">Suggestions</p>
+                        <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
+                            <li>At least one uppercase</li>
+                            <li>At least one lowercase</li>
+                            <li>At least one numeric</li>
+                            <li>At least one special Character</li>
+                            <li>Minimum 8 characters</li>
+                        </ul>
+                    </ng-template>
+                </p-password>
+                <small *ngIf="(userDetails.id && !!userDetails.password && !isValidPassword)" id="username-help"
+                    class="p-error">Valid password is required.</small>
+            </div>
+            <div class="flex up-pwd" *ngIf="!!resetPassword">
+                <button pButton pRipple label="Update Password" disable="!resetPassword"
+                    (click)="updatePassword()"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isLoader" class="" style="height: 100%;">
+    <app-loader></app-loader>
+</div>
+
+<div *ngIf="showDialog">
+    <app-status-messsage [alertType]="alertType" [message]="statusMessage" [visible]="showDialog"
+        (onCloseDialog)="closeAlertDialog($event)">
+    </app-status-messsage>
+</div>

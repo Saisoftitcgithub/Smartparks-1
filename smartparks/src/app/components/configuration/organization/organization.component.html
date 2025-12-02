@@ -1,0 +1,124 @@
+<div class="col-12 filters">
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <div class="field grid">
+                <div class="col-12 md:col-6">
+                    <p-dropdown placeholder="Select Organization" [options]="orgList" optionLabel="name"
+                        [(ngModel)]="selectedOrganization" (onChange)="onOrgSelect($event)"></p-dropdown>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="right">
+            <div class="my-2">
+                <button pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2"
+                    (click)="addNewOrganization()"></button>
+            </div>
+        </ng-template>
+    </p-toolbar>
+</div>
+<div class="col-12 form-fields" *ngIf="!!orgDetails || !!selectedOrganization">
+    <div class="card">
+        <h5 *ngIf="!!selectedOrganization">Organization - <b>{{selectedOrganization.name}}</b></h5>
+        <div class="p-fluid p-formgrid grid" [formGroup]="orgFormGroup">
+            <div class="field col-12 md:col-6">
+                <label htmlFor="orgname">Org Name *</label>
+                <input pInputText id="orgname" type="text" formControlName="name" />
+                <small *ngIf="orgFormGroup.get('name')?.hasError('required') && orgFormGroup.get('name')?.touched"
+                    id="orgname-help" class="p-error">Org Name is required.</small>
+                <small *ngIf="orgFormGroup.get('name')?.hasError('pattern') && orgFormGroup.get('name')?.touched"
+                    id="orgname-help" class="p-error">Org Name is not valid.</small>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label htmlFor="email">Email *</label>
+                <input pInputText id="email" type="email" formControlName="email" />
+                <small *ngIf="orgFormGroup.get('email')?.hasError('required') && orgFormGroup.get('email')?.touched"
+                    id="email-help" class="p-error">Email is required.</small>
+                <small *ngIf="orgFormGroup.get('email')?.hasError('pattern') && orgFormGroup.get('email')?.touched"
+                    id="email-help" class="p-error">Email is not valid.</small>
+            </div>
+            <div class="field col-12 md:col-4">
+                <label htmlFor="website">Website</label>
+                <input pInputText id="website" type="text" formControlName="website" />
+            </div>
+            <div class="field col-12 md:col-4">
+                <label htmlFor="businessType">Business Type</label>
+                <input pInputText id="businessType" type="text" formControlName="businessType" />
+                <small
+                    *ngIf="orgFormGroup.get('businessType')?.hasError('pattern') && orgFormGroup.get('businessType')?.touched"
+                    id="bt-help" class="p-error">Business Type is not valid.</small>
+            </div>
+            <div class="field col-12 md:col-4">
+                <label htmlFor="startDate">Date Of Incorporation</label>
+                <p-calendar id="startDate" [showIcon]="true" inputId="icon" dataType="string"
+                    formControlName="dateOfIncorporation" dateFormat="yy-mm-dd"></p-calendar>
+            </div>
+            <div class="grid p-3" formGroupName="headQuarters">
+                <div class="field col-12 md:col-4">
+                    <label htmlFor="building">Building</label>
+                    <input pInputText id="building" type="text" formControlName="building" />
+                    <small
+                        *ngIf="orgFormGroup.get('headQuarters')?.get('building')?.hasError('pattern') && orgFormGroup.get('headQuarters')?.get('building')?.touched"
+                        id="b-help" class="p-error">Building is not valid.</small>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label htmlFor="street">Street</label>
+                    <input pInputText id="street" type="text" formControlName="street" />
+                    <small
+                        *ngIf="orgFormGroup.get('headQuarters')?.get('street')?.hasError('pattern') && orgFormGroup.get('headQuarters')?.get('street')?.touched"
+                        id="s-help" class="p-error">Street is not valid.</small>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label htmlFor="area">Area</label>
+                    <input pInputText id="area" type="text" formControlName="area" />
+                    <small
+                        *ngIf="orgFormGroup.get('headQuarters')?.get('area')?.hasError('pattern') && orgFormGroup.get('headQuarters')?.get('area')?.touched"
+                        id="a-help" class="p-error">Area is not valid.</small>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label htmlFor="city">City</label>
+                    <input pInputText id="city" type="text" formControlName="city" />
+                    <small
+                        *ngIf="orgFormGroup.get('headQuarters')?.get('city')?.hasError('pattern') && orgFormGroup.get('headQuarters')?.get('city')?.touched"
+                        id="c-help" class="p-error">City is not valid.</small>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label htmlFor="zip">Zip</label>
+                    <input pInputText id="zip" type="text" formControlName="zip" />
+                    <small
+                        *ngIf="orgFormGroup.get('headQuarters')?.get('zip')?.hasError('pattern') && orgFormGroup.get('headQuarters')?.get('zip')?.touched"
+                        id="z-help" class="p-error">Zip is not valid.</small>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label htmlFor="country">Country</label>
+                    <p-dropdown [options]="countriesList" formControlName="country"></p-dropdown>
+                </div>
+                <div class="p-3 grid col-12" formGroupName="location">
+                    <div class="field col-12 md:col-3">
+                        <label htmlFor="latitude">Latitiude</label>
+                        <input pInputText id="latitude" type="number" formControlName="x" />
+                    </div>
+                    <div class="field col-12 md:col-3">
+                        <label htmlFor="longitude">Longitude</label>
+                        <input pInputText id="longitude" type="number" formControlName="y" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-wrap gap-2 justify-content-end" *ngIf="!selectedOrganization">
+            <button pButton pRipple label="Save" (click)="saveOrg()"></button>
+        </div>
+        <div class="flex flex-wrap gap-2 justify-content-end" *ngIf="!!selectedOrganization">
+            <button pButton pRipple label="Update" (click)="updateOrg()"></button>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isLoader" class="" style="height: 100%;">
+    <app-loader></app-loader>
+</div>
+
+<div *ngIf="showDialog">
+    <app-status-messsage [alertType]="alertType" [message]="statusMessage" [visible]="showDialog"
+        (onCloseDialog)="closeAlertDialog($event)">
+    </app-status-messsage>
+</div>

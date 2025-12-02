@@ -1,0 +1,33 @@
+<div class="col-12 pt-0 filter">
+    <div>
+        <p-dropdown placeholder="Select Branch" [options]="branchList" optionLabel="name" [(ngModel)]="selectedBranch"
+            (onChange)="onBranchSelect($event)"></p-dropdown>
+    </div>
+    <div class="pl-3 pr-5">
+        <p-calendar [(ngModel)]="selectedDate" [showIcon]="true"></p-calendar>
+    </div>
+    <div>
+        <p-button icon="pi pi-search" severity="success" (click)="refreshDashboard()"
+            [disabled]="!selectedDate || !selectedBranch"></p-button>
+    </div>
+</div>
+<div class="grid">
+    <div class="col-12 xl:col-6">
+        <div class="card flex flex-column align-items-center pie-chart">
+            <h3 class="text-left w-full">Current Park Status</h3>
+            <p-chart type="doughnut" [data]="pieData" [options]="pieOptions"></p-chart>
+        </div>
+    </div>
+    <div class="col-12 xl:col-6">
+        <div class="card">
+            <h3>Vehicle Count</h3>
+            <p-chart type="bar" [data]="sessionChartData" [options]="sessionChartOptions"></p-chart>
+        </div>
+    </div>
+    <div class="col-12 xl:col-12">
+        <div class="card">
+            <h3>Peek Parking Time</h3>
+            <p-chart type="bar" [data]="hourlyChartData" [options]="hourlyChartOptions"></p-chart>
+        </div>
+    </div>
+</div>

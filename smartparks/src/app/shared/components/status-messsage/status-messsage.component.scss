@@ -1,0 +1,15 @@
+.Success {
+    ::ng-deep {
+        .p-dialog-title{
+            color: green;
+        }
+    }
+}
+
+.Error {
+    ::ng-deep {
+        .p-dialog-title{
+            color: indianred;
+        }
+    }
+}

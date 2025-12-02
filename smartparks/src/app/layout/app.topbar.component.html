@@ -1,0 +1,25 @@
+<div class="layout-topbar">
+    <a class="layout-topbar-logo" routerLink="dashboard">
+        <img src="assets/ajman-municipality-logo.png" alt="Ajman Municipality logo">
+        <!-- <span>Smart Parks</span> -->
+    </a>
+
+    <button #menubutton class="p-link layout-menu-button layout-topbar-button menu-btn" (click)="layoutService.onMenuToggle()">
+        <i class="pi pi-bars"></i>
+    </button>
+
+    <button #topbarmenubutton class="p-link layout-topbar-menu-button layout-topbar-button"
+        (click)="layoutService.showProfileSidebar()">
+        <i class="pi pi-ellipsis-v"></i>
+    </button>
+
+    <div clASS="project-title">Smart Parks</div>
+
+    <div #topbarmenu class="layout-topbar-menu"
+        [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
+        <button class="p-link layout-topbar-button" (click)="logout()" title="Log Out">
+            <i class="pi pi-sign-out"></i>
+            <span>Log Out</span>
+        </button>
+    </div>
+</div>

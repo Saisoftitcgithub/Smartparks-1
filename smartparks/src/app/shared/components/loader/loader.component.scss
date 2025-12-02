@@ -1,0 +1,36 @@
+@keyframes spin {
+    from {transform: rotate(0deg);}
+    to { transform: rotate(360deg);};
+}
+
+@-webkit-keyframes spin {
+    from {-webkit-transform: rotate(0deg);}
+    to {-webkit-transform: rotate(360deg);}
+}
+.cover {
+    position: fixed;
+    z-index: 999;
+    width: 100%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    &::after {
+        content: '';
+        position: absolute;
+        display: block;
+        width: 40px;
+        height: 40px;
+        top: calc(50% - 40px);
+        left: calc(50% - 40px);
+        border-color: black;
+        border-style: solid;
+        border-top-color: transparent;
+        border-width: 4px;
+        border-radius: 50%;
+        animation: spin .8s linear infinite;
+        -webkit-animation: spin .8s linear infinite;
+    }
+}
+

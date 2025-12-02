@@ -1,0 +1,224 @@
+<div class="col-12 filters">
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <div class="field grid">
+                <div class="col-12 md:col-6">
+                    <p-dropdown placeholder="Select Branch" [options]="branchList" optionLabel="name"
+                        [(ngModel)]="selectedBranch" (onChange)="onBranchSelect($event)"></p-dropdown>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="right">
+            <div class="my-2">
+                <button pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2"
+                    (click)="addBranch()"></button>
+            </div>
+        </ng-template>
+    </p-toolbar>
+</div>
+
+<div class="col-12 form-fields" *ngIf="selectedBranch || branchDetails">
+    <p-tabView [(activeIndex)]="activeIndex" (onChange)="onTabChange($event)">
+        <p-tabPanel header="Branch Details">
+            <div>
+                <div class="p-fluid p-formgrid grid" [formGroup]="branchFormGroup">
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="branch">Branch Name *</label>
+                        <input pInputText id="branch" type="text" formControlName="name" />
+                        <small
+                            *ngIf="branchFormGroup.get('name')?.hasError('required') && branchFormGroup.get('name')?.touched"
+                            id="branchName-help" class="p-error">Branch Name is required.</small>
+                        <small
+                            *ngIf="branchFormGroup.get('name')?.hasError('pattern') && branchFormGroup.get('name')?.touched"
+                            id="branchName-help" class="p-error">Branch Name is not valid.</small>
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="branchType">Branch Type</label>
+                        <input pInputText id="branchType" type="text" formControlName="type" />
+                        <small
+                            *ngIf="branchFormGroup.get('type')?.hasError('pattern') && branchFormGroup.get('type')?.touched"
+                            id="type-help" class="p-error">Business Type is not valid.</small>
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="workstationId">Workstation Id *</label>
+                        <input pInputText id="workstationId" type="text" formControlName="workstationId" />
+                        <small
+                            *ngIf="branchFormGroup.get('workstationId')?.hasError('required') && branchFormGroup.get('workstationId')?.touched"
+                            id="ws-help" class="p-error">Workstation Id is required.</small>
+                        <small
+                            *ngIf="branchFormGroup.get('workstationId')?.hasError('pattern') && branchFormGroup.get('workstationId')?.touched"
+                            id="ws-help" class="p-error">Workstation Id is not valid.</small>
+                    </div>
+                    <div class="field col-12 md:col-3">
+                        <label htmlFor="timings">Start Time</label>
+                        <input pInputText aria-label="start time" [ngxTimepicker]="startValue"
+                            formControlName="startTime" [format]="24" readonly>
+                        <ngx-material-timepicker #startValue></ngx-material-timepicker>
+                    </div>
+                    <div class="field col-12 md:col-3">
+                        <label htmlFor="timings">End Time</label>
+                        <input pInputText aria-label="end time" [ngxTimepicker]="endValue"
+                            [disabled]="!branchFormGroup.get('startTime')?.value" formControlName="endTime"
+                            [min]="branchFormGroup.get('startTime')?.value" [format]="24" readonly>
+                        <ngx-material-timepicker #endValue></ngx-material-timepicker>
+                    </div>
+                    <div class="field col-12 md:col-2">
+                        <label htmlFor="latitude">Total Slots</label>
+                        <input pInputText id="latitude" type="number" formControlName="totalSlots" />
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <h5 class="status-label">Status</h5>
+                        <p-inputSwitch formControlName="active"></p-inputSwitch>
+                    </div>
+                    <div class="grid p-3" formGroupName="address">
+                        <div class="field col-12 md:col-4">
+                            <label htmlFor="building">Building</label>
+                            <input pInputText id="building" type="text" formControlName="building" />
+                            <small
+                                *ngIf="branchFormGroup.get('address')?.get('building')?.hasError('pattern') && branchFormGroup.get('address')?.get('building')?.touched"
+                                id="b-help" class="p-error">Building is not valid.</small>
+                        </div>
+                        <div class="field col-12 md:col-4">
+                            <label htmlFor="street">Street</label>
+                            <input pInputText id="street" type="text" formControlName="street" />
+                            <small
+                                *ngIf="branchFormGroup.get('address')?.get('street')?.hasError('pattern') && branchFormGroup.get('address')?.get('street')?.touched"
+                                id="s-help" class="p-error">Street is not valid.</small>
+                        </div>
+                        <div class="field col-12 md:col-4">
+                            <label htmlFor="area">Area</label>
+                            <input pInputText id="area" type="text" formControlName="area" />
+                            <small
+                                *ngIf="branchFormGroup.get('address')?.get('area')?.hasError('pattern') && branchFormGroup.get('address')?.get('area')?.touched"
+                                id="a-help" class="p-error">Area is not valid.</small>
+                        </div>
+                        <div class="field col-12 md:col-4">
+                            <label htmlFor="city">City</label>
+                            <input pInputText id="city" type="text" formControlName="city" />
+                            <small
+                                *ngIf="branchFormGroup.get('address')?.get('city')?.hasError('pattern') && branchFormGroup.get('address')?.get('city')?.touched"
+                                id="c-help" class="p-error">City is not valid.</small>
+                        </div>
+                        <div class="field col-12 md:col-4">
+                            <label htmlFor="zip">Zip</label>
+                            <input pInputText id="zip" type="text" formControlName="zip" />
+                            <small
+                                *ngIf="branchFormGroup.get('address')?.get('zip')?.hasError('pattern') && branchFormGroup.get('address')?.get('zip')?.touched"
+                                id="z-help" class="p-error">Zip is not valid.</small>
+                        </div>
+                        <div class="field col-12 md:col-4">
+                            <label htmlFor="country">Country</label>
+                            <p-dropdown [options]="countriesList" formControlName="country"></p-dropdown>
+                        </div>
+                        <div class="grid p-3 col-12" formGroupName="location">
+                            <div class="field col-12 md:col-3">
+                                <label htmlFor="latitude">Latitude</label>
+                                <input pInputText id="latitude" type="number" formControlName="x" />
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label htmlFor="longitude">Longitude</label>
+                                <input pInputText id="longitude" type="number" formControlName="y" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-wrap gap-2 justify-content-end" *ngIf="!selectedBranch">
+                    <button pButton pRipple label="Save" (click)="saveBranch()"></button>
+                </div>
+                <div class="flex flex-wrap gap-2 justify-content-end" *ngIf="!!selectedBranch">
+                    <button pButton pRipple label="Update" (click)="updateBranch()"></button>
+                </div>
+            </div>
+        </p-tabPanel>
+        <p-tabPanel header="Gate Details" [disabled]="!selectedBranch">
+            <div class="col-12 justify-content-end add-gate">
+                <button pButton pRipple label="Add gate" (click)="addGate()"></button>
+            </div>
+            <div class="p-fluid p-formgrid gate-details" *ngIf="!!gateDetailObj" [formGroup]="gateFormGroup">
+                <div class="field col-12 md:col-4">
+                    <label htmlFor="gateName">Gate Name *</label>
+                    <input pInputText id="gateName" type="text" formControlName="gateName"/>
+                    <small
+                        *ngIf="gateFormGroup.get('gateName')?.hasError('required') && gateFormGroup.get('gateName')?.touched"
+                        id="gate-help" class="p-error">Gate Name is required.</small>
+                    <small
+                        *ngIf="gateFormGroup.get('gateName')?.hasError('pattern') && gateFormGroup.get('gateName')?.touched"
+                        id="gate-help" class="p-error">Gate Name is not valid.</small>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label htmlFor="vehCameraName">Vehicle Camera Name</label>
+                    <input pInputText id="vehCameraName" type="text" formControlName="vehCameraName" />
+                    <small
+                        *ngIf="gateFormGroup.get('vehCameraName')?.hasError('pattern') && gateFormGroup.get('vehCameraName')?.touched"
+                        id="v-help" class="p-error">Vehicle Camera Name is not valid.</small>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label htmlFor="anprCameraName">ANPR Camera Name *</label>
+                    <input pInputText id="anprCameraName" type="text" formControlName="anprCameraName"/>
+                    <small
+                        *ngIf="gateFormGroup.get('anprCameraName')?.hasError('required') && gateFormGroup.get('anprCameraName')?.touched"
+                        id="an-help" class="p-error">ANPR Camera Name is required.</small>
+                    <small
+                        *ngIf="gateFormGroup.get('anprCameraName')?.hasError('pattern') && gateFormGroup.get('anprCameraName')?.touched"
+                        id="an-help" class="p-error">ANPR Camera Name is not valid.</small>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label htmlFor="qrSNo">QR S.NO</label>
+                    <input pInputText id="qrSNo" type="text" formControlName="qrsno"/>
+                    <small
+                        *ngIf="gateFormGroup.get('qrsno')?.hasError('pattern') && gateFormGroup.get('qrsno')?.touched"
+                        id="qr-help" class="p-error">QR S.No is not valid.</small>
+                </div>
+            </div>
+            <div class="flex flex-wrap gap-2 justify-content-end" *ngIf="!isEditGate && !!gateDetailObj">
+                <button pButton pRipple label="Save" (click)="saveGate()"></button>
+            </div>
+            <div class="flex flex-wrap gap-2 justify-content-end" *ngIf="isEditGate && !!gateDetailObj">
+                <button pButton pRipple label="Update" (click)="updateGate()"></button>
+            </div>
+            <div class="col-12" *ngIf="gatesData.length > 0">
+                <div class="card">
+                    <p-table [value]="gatesData" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
+                        [tableStyle]="{ 'min-width': '50rem' }" [columns]="cols"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                        [rowsPerPageOptions]="[5, 10, 15]" styleClass="p-datatable-gridlines">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th *ngFor="let col of cols">
+                                    {{ col.label }}
+                                </th>
+                                <th class="action-label">
+                                    Action
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <tr>
+                                <td *ngFor="let col of cols;">
+                                    {{ rowData[col.header] }}
+                                </td>
+                                <td>
+                                    <div class="flex gate-action">
+                                        <button pButton pRipple icon="pi pi-pencil"
+                                            class="p-button-rounded p-button-success mr-2" (click)="editGate(rowData)">
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+        </p-tabPanel>
+    </p-tabView>
+</div>
+
+<div *ngIf="isLoader" class="" style="height: 100%;">
+    <app-loader></app-loader>
+</div>
+
+<div *ngIf="showDialog">
+    <app-status-messsage [alertType]="alertType" [message]="statusMessage" [visible]="showDialog"
+        (onCloseDialog)="closeAlertDialog($event)">
+    </app-status-messsage>
+</div>

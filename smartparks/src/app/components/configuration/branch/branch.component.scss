@@ -1,0 +1,18 @@
+.add-gate {
+    text-align: right;
+}
+.gate-action {
+    justify-content: center;
+}
+.gate-details {
+    display: flex;
+    flex-flow: wrap;
+}
+.status-label {
+    font-weight: 400;
+    font-size: 14px;
+    color: #495057;
+}
+.action-label {
+    text-align: center !important;
+}

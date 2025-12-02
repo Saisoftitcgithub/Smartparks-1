@@ -20,7 +20,7 @@ services:
     name: smartparks-frontend
     env: node
     plan: free
-    buildCommand: cd smartparks && npm install && npx ng build --configuration production
+    buildCommand: cd smartparks && npm install && npm run build
     startCommand: cd smartparks && node server.js
     envVars:
       - key: NODE_ENV

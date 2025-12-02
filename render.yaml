@@ -20,7 +20,7 @@ services:
     name: smartparks-frontend
     env: node
     plan: free
-    buildCommand: cd smartparks && npm install && NODE_OPTIONS=--max_old_space_size=16384 npm run build
+    buildCommand: cd smartparks && npm install --include=dev && NODE_OPTIONS=--max_old_space_size=16384 npx -y @angular/cli build --configuration production
     startCommand: cd smartparks && node server.js
     envVars:
       - key: NODE_ENV

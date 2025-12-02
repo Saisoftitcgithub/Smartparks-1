@@ -5,31 +5,20 @@
 export const environment = {
     production: true,
     url : window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + '/',
-    // For Render deployment - dynamically construct backend URL
-    // If on Render, try to construct backend URL from frontend URL
+    // Backend API URL - use Render backend URL for production
     apiUrl: (() => {
+      // Check if running on Render
       if (window.location.hostname.includes('render.com') || window.location.hostname.includes('onrender.com')) {
-        // Try to construct backend URL from frontend URL
-        // Replace 'frontend' with 'backend' in the service name
-        const hostname = window.location.hostname;
-        if (hostname.includes('smartparks-frontend')) {
-          return hostname.replace('smartparks-frontend', 'smartparks-backend') + '/api';
-        }
-        // Fallback: use the standard backend URL pattern
         return 'https://smartparks-backend.onrender.com/api';
       }
-      return window.location.protocol + '//' + window.location.hostname + '/api';
+      // Local development
+      if (window.location.protocol === 'https:') {
+        return window.location.protocol + '//' + window.location.hostname + '/api';
+      } else {
+        return window.location.protocol + '//' + window.location.hostname + ':5680/api/';
+      }
     })()
   };
-  
-  // Fallback for local development
-  if (!environment.apiUrl || environment.apiUrl.includes('localhost')) {
-    if (window.location.protocol === 'https:') {
-      environment.apiUrl = window.location.protocol + '//' + window.location.hostname + '/api';
-    } else {
-      environment.apiUrl = window.location.protocol + '//' + window.location.hostname + ':5680/api/';
-    }
-  }
   
   console.log('API URL:', environment.apiUrl);
 

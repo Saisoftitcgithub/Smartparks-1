@@ -109,6 +109,20 @@ const verifyToken = (req, res, next) => {
 
 // Routes
 
+// Root route
+app.get('/', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    message: 'SmartParks Backend API is running',
+    version: '1.0.0',
+    endpoints: {
+      health: '/api/health',
+      login: '/api/login',
+      docs: 'API endpoints are available under /api/*'
+    }
+  });
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Backend is running' });

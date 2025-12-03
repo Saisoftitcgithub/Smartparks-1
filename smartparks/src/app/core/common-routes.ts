@@ -1,5 +1,11 @@
 import { environment } from "../../environments/environment"
 
+// Log the environment configuration when routes are loaded
+console.log('=== COMMON ROUTES LOADED ===');
+console.log('Environment production:', environment.production);
+console.log('Environment API URL:', environment.apiUrl);
+console.log('Login route will be:', environment.apiUrl + 'login');
+
 export const CommonRoutes: any = {
     LOGIN: environment.apiUrl + `login`,
     LOGOUT: environment.apiUrl + `logout`,

@@ -5,36 +5,19 @@
 export const environment = {
     production: true,
     url : window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + '/',
-    // Backend API URL - use Render backend URL for production
-    apiUrl: (() => {
-      const hostname = window.location.hostname;
-      console.log('Environment: Production');
-      console.log('Hostname:', hostname);
-      
-      // Check if running on Render
-      if (hostname.includes('render.com') || hostname.includes('onrender.com')) {
-        const apiUrl = 'https://smartparks-backend.onrender.com/api/';
-        console.log('Detected Render environment, using:', apiUrl);
-        return apiUrl;
-      }
-      
-      // Local development fallback
-      if (window.location.protocol === 'https:') {
-        const apiUrl = window.location.protocol + '//' + hostname + '/api/';
-        console.log('Using HTTPS local:', apiUrl);
-        return apiUrl;
-      } else {
-        const apiUrl = window.location.protocol + '//' + hostname + ':5680/api/';
-        console.log('Using HTTP local:', apiUrl);
-        return apiUrl;
-      }
-    })()
+    // Backend API URL - HARDCODED for Render deployment
+    // This ensures the correct URL is always used in production
+    apiUrl: 'https://smartparks-backend.onrender.com/api/'
   };
   
-  console.log('=== Environment Configuration ===');
-  console.log('Production:', environment.production);
+  // Extensive logging for debugging
+  console.log('=== PRODUCTION Environment Configuration ===');
+  console.log('Production mode:', environment.production);
   console.log('API URL:', environment.apiUrl);
+  console.log('Current hostname:', window.location.hostname);
+  console.log('Current protocol:', window.location.protocol);
   console.log('Full URL:', window.location.href);
+  console.log('Login endpoint will be:', environment.apiUrl + 'login');
 
   // apiUrl: 'http://localhost:8086/api/'
   
